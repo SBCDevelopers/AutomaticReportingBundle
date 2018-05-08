@@ -1,0 +1,41 @@
+{
+  "name" : "sbc/auto-reporting-bundle",
+  "description" : "Send daily PDF reports about the application's activity",
+  "type" : "symfony-bundle",
+  "authors" : [
+    {
+    "name" : "Haouass Abderraouf",
+    "email" : "direction@sbc.tn"
+    },
+    {
+      "name" : "Slimen Arnaout",
+      "email" : "arnaout.slimen@gmail.com"
+    }
+  ],
+  "keywords" : [
+    "reporting bundle",
+    "symfony reporting",
+    "mail reporting"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "require" : {
+    "php": ">=5.5.9",
+    "symfony/framework-bundle": "^2.8 || ^3.0",
+    "dompdf/dompdf": "^0.8.2"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "SBC\\AutomaticReportingBundle" : ""
+    }
+  },
+  "target-dir" : "SBC/AutomaticReportingBundle",
+  "repositories" : [{
+  }],
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "1-dev"
+    }
+  }
+}
