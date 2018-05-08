@@ -1,0 +1,4 @@
+services:
+#    automatic_reporting.example:
+#        class: SBC\AutomaticReportingBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

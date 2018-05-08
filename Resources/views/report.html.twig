@@ -1,0 +1,46 @@
+<html lang="fr">
+<head>
+    <style>
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, td{
+            border: solid 1px black;
+        }
+
+        .center{
+            text-align: center;
+        }
+
+        .container{
+            margin: 20px;
+        }
+    </style>
+</head>
+<body class="container">
+    <div class="center">
+        <h2>Rapport Automatique de {{ 'now'|date('d/m/Y') }}</h2>
+        <p>
+            Rapport envoyé via votre applciation <strong>{{ app_name }}</strong>
+        </p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th class="center">Formulaire</th>
+            <th class="center">Nombre de saisie</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in data %}
+            <tr>
+                <td>{{ item['entity'] }}</td>
+                <td class="center">{{ item['count'] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
