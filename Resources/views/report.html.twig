@@ -21,9 +21,10 @@
 </head>
 <body class="container">
     <div class="center">
-        <h2>Rapport Automatique de {{ 'now'|date('d/m/Y') }}</h2>
+        <h2>Rapport Automatique de suivi de l'avancement de saisie</h2>
         <p>
-            Rapport envoyé via votre applciation <strong>{{ app_name }}</strong>
+            Application: {{ app_name }}<br>
+            Journée du {{ 'now'|date('d/m/Y') }}
         </p>
     </div>
     <table>
@@ -34,12 +35,18 @@
         </tr>
         </thead>
         <tbody>
+        {% set total = 0 %}
         {% for item in data %}
+            {% set total = total + item['count'] %}
             <tr>
                 <td>{{ item['entity'] }}</td>
                 <td class="center">{{ item['count'] }}</td>
             </tr>
         {% endfor %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td class="center"><strong>{{ total }}</strong></td>
+            </tr>
         </tbody>
     </table>
 </body>

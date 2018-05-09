@@ -24,7 +24,7 @@ class Dispatcher
         ));
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Rapport automatique de suivie')
+            ->setSubject('Rapport automatique de suivi')
             ->setFrom('robot@sbc-demo.com')
             ->setTo($parameters['recipients'])
             ->setBody($content,
