@@ -24,6 +24,7 @@ Call `@Report` Annotation in the entities you want to follow:
  *
  * @ORM\Table(name="post")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
+ *
  * @Report(
  *  dateColumn="creationDate",
  *  reportingName="Poste"
@@ -32,6 +33,37 @@ Call `@Report` Annotation in the entities you want to follow:
 class Post
 {
 ...
+}
+```
+
+### Step 2 (differentiation solution):
+You can also separate result for the same entity using the DifferentiationColumn Annotation:
+```php
+/**
+ * Post
+ *
+ * @ORM\Table(name="post")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PostRepository")
+ *
+ * @Report(
+ *  dateColumn="creationDate",
+ *  differentiationColumn="type",
+ *  differentiations={
+ *     @DifferentiationColumn(value="A", reportingName="Post of type A"),
+ *     @DifferentiationColumn(value="B", reportingName="Post of type B")
+ *  }
+ * )
+ */
+class Post
+{
+...
+    /**
+     * Type of the Post entity
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
 }
 ```
 
