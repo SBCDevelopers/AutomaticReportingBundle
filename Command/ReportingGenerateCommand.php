@@ -4,6 +4,7 @@ namespace SBC\AutomaticReportingBundle\Command;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use SBC\AutomaticReportingBundle\Annotation\DifferentiationColumn;
 use SBC\AutomaticReportingBundle\Annotation\Report;
 use SBC\AutomaticReportingBundle\Controller\Dispatcher;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -98,12 +99,37 @@ class ReportingGenerateCommand extends ContainerAwareCommand
         $data = array();
 
         foreach ($annotations as $annotation){
-            $count = $this->count_data($em, $annotation);
-            $item = array(
-                'entity' => $annotation->reportingName,
-                'count' => $count,
-            );
-            $data[] = $item;
+            if($annotation instanceof Report){
+                if($annotation->differentiationColumn == null){// if reporting by entity itself
+
+                    $count = $this->count_data($em, $annotation);
+                    $item = array(
+                        'entity' => $annotation->reportingName,
+                        'count' => $count,
+                    );
+                    $data[] = $item;
+
+                }else{// if reporting entity by differentiation column
+                    foreach ($annotation->differentiations as $differentiation){
+                        if($differentiation instanceof DifferentiationColumn){
+                            $count = $this->count_data_with_differentiation(
+                                $em, $annotation->getTableName(),
+                                $annotation->getEntityNamespace(),
+                                $annotation->dateColumn,
+                                $annotation->differentiationColumn,
+                                $differentiation->value
+                            );
+
+                            $item = array(
+                                'entity' => $differentiation->reportingName,
+                                'count' => $count,
+                            );
+                            $data[] = $item;
+                        }
+                    }
+                }
+
+            }
         }
 
         return $data;
@@ -131,6 +157,31 @@ class ReportingGenerateCommand extends ContainerAwareCommand
             ->andWhere($alias.'.'.$column.' <= :end')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
+        ;
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function count_data_with_differentiation(
+        EntityManager $em,
+        $alias,
+        $namespace,
+        $dateColumn,
+        $differentiationColumn,
+        $differentiationValue
+    ){
+        $start = date('y-m-d').' 00:00:00';
+        $end = date('y-m-d').' 23:59:59';
+
+        $qb = $em->createQueryBuilder();
+        $qb
+            ->select('count('.$alias.'.'.$dateColumn.')')
+            ->from($namespace, $alias)
+            ->where($alias.'.'.$dateColumn.' >= :start')
+            ->andWhere($alias.'.'.$dateColumn.' <= :end')
+            ->andWhere($alias.'.'.$differentiationColumn.' = :diffValue')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->setParameter('diffValue', $differentiationValue)
         ;
         return $qb->getQuery()->getSingleScalarResult();
     }

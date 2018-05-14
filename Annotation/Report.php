@@ -23,10 +23,20 @@ final class Report
     /**
      * Name of the entity that will be used when sending the report
      * @var string
-     *
-     * @DA\Required
      */
-    public $reportingName;
+    public $reportingName = 'NULL';
+
+    /**
+     * Name of column that will separate entity
+     * @var string
+     */
+    public $differentiationColumn;
+
+    /**
+     * List of differentiation
+     * @var array<SBC\AutomaticReportingBundle\Annotation\DifferentiationColumn>
+     */
+    public $differentiations;
 
     /**
      * Namespace of the entity
